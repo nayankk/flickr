@@ -19,4 +19,7 @@ public interface FlickrNetworkInterface {
 
     @GET
     Call<FlickrRepsonseModel> fetchPhotoPage(@Url String url, @Query("page") int page);
+
+    @GET
+    Call<FlickrRepsonseModel> fetchPhotoQuery(@Url String url, @Query("text") String text);
 }
