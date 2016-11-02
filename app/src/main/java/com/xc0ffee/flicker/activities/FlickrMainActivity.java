@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 
 import com.xc0ffee.flicker.R;
 import com.xc0ffee.flicker.adapters.FlickrImageAdapter;
@@ -21,6 +22,8 @@ import butterknife.ButterKnife;
 
 public class FlickrMainActivity extends AppCompatActivity {
 
+    private static final String TAG = FlickrMainActivity.class.getSimpleName();
+
     @BindView(R.id.rvPhotosView)
     RecyclerView mPhotosView;
 
@@ -35,10 +38,19 @@ public class FlickrMainActivity extends AppCompatActivity {
 
         mAdapter = new FlickrImageAdapter();
         mPhotosView.setAdapter(mAdapter);
-        mPhotosView.setLayoutManager(
-                new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
+        StaggeredGridLayoutManager layoutManager =
+                new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
+        mPhotosView.setLayoutManager(layoutManager);
         mPhotosView.addItemDecoration(
                 new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        EndlessRecyclerViewScrollListener scrollListener =
+                new EndlessRecyclerViewScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                onfetchMore(page);
+            }
+        };
+        mPhotosView.addOnScrollListener(scrollListener);
 
         FlickrNetworkGateway.getInstance().getPhotos(new GetPhotosResponse() {
             @Override
@@ -53,7 +65,26 @@ public class FlickrMainActivity extends AppCompatActivity {
         });
     }
 
+    private void onfetchMore(int page) {
+        Log.d(TAG, "fetch more. page = " + page );
+        FlickrNetworkGateway.getInstance().getPhotos(new GetPhotosResponse() {
+            @Override
+            public void onSuccess(FlickrRepsonseModel model) {
+                onMoreItemsfetched(model.getPhotos().getPhoto());
+            }
+
+            @Override
+            public void onFailure() {
+
+            }
+        });
+    }
+
     private void onItemsFetched(List<Photo> photoList) {
         mAdapter.addItems(photoList);
+    }
+
+    private void onMoreItemsfetched(List<Photo> photoList) {
+        mAdapter.addMoreImages(photoList);
     }
 }

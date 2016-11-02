@@ -63,4 +63,10 @@ public class FlickrImageAdapter extends RecyclerView.Adapter<FlickrImageAdapter.
         mPhotos.addAll(photoList);
         notifyItemRangeChanged(0, photoList.size());
     }
+
+    public void addMoreImages(List<Photo> moreImages) {
+        int oldSize = mPhotos.size();
+        mPhotos.addAll(moreImages);
+        notifyItemRangeChanged(oldSize, moreImages.size());
+    }
 }

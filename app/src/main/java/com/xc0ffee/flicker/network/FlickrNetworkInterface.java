@@ -4,6 +4,7 @@ import com.xc0ffee.flicker.models.FlickrRepsonseModel;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Query;
 import retrofit2.http.Url;
 
 /**
@@ -15,4 +16,7 @@ import retrofit2.http.Url;
 public interface FlickrNetworkInterface {
     @GET
     Call<FlickrRepsonseModel> fetchPhotos(@Url String url);
+
+    @GET
+    Call<FlickrRepsonseModel> fetchPhotoPage(@Url String url, @Query("page") int page);
 }

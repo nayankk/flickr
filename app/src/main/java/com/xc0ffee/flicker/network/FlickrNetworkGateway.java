@@ -67,5 +67,21 @@ public class FlickrNetworkGateway {
             }
         });
     }
+
+    public void getPhotosForPage(final GetPhotosResponse callback, final int pageId) {
+        Call<FlickrRepsonseModel> call = mApiService.fetchPhotoPage(URL, pageId);
+        call.enqueue(new Callback<FlickrRepsonseModel>() {
+            @Override
+            public void onResponse(Call<FlickrRepsonseModel> call, Response<FlickrRepsonseModel> response) {
+                Log.d(TAG, "onSuccess");
+                callback.onSuccess(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<FlickrRepsonseModel> call, Throwable t) {
+                Log.d(TAG, "onFailure");
+                callback.onFailure();
+            }
+        });
+    }
 }
-;
