@@ -7,8 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.xc0ffee.flicker.R;
 import com.xc0ffee.flicker.models.Photo;
+import com.xc0ffee.flicker.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +38,7 @@ public class FlickrImageAdapter extends RecyclerView.Adapter<FlickrImageAdapter.
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Photo photo = mPhotos.get(position);
+        Glide.with(holder.mPhoto.getContext()).load(Utils.getImageUrl(photo)).into(holder.mPhoto);
     }
 
     @Override
