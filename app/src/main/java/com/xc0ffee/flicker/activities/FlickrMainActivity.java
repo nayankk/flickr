@@ -25,6 +25,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+/* Mail activity */
 public class FlickrMainActivity extends AppCompatActivity {
 
     private static final String TAG = FlickrMainActivity.class.getSimpleName();
